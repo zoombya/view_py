@@ -10,6 +10,9 @@ readme = "README.md"
 requires-python = ">=3.9"
 dependencies = ["numpy"]
 
+[project.scripts]
+oxview_py = "view_py.cli:main"
+
 [project.optional-dependencies]
 dev = ["pytest"]
 

@@ -20,7 +20,24 @@ pip install -e .
 
 The only dependency is **numpy**.
 
-## Quick Start
+## Command Line
+
+After installation the `oxview_py` command is available:
+
+```bash
+# Basic conversion (lattice auto-detected, random scaffold sequence)
+oxview_py convert design.json
+
+# With scaffold sequence (file or literal string)
+oxview_py convert design.json -s scaffold.txt
+
+# Specify lattice type and output path
+oxview_py convert design.json -g he -o output.oxview
+```
+
+Run `oxview_py convert --help` for all options.
+
+## Python API
 
 ```python
 from view_py import convert_cadnano
