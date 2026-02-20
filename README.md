@@ -89,7 +89,7 @@ The output follows the [oxView file format](https://github.com/sulcgroup/oxdna-v
         "p": [0, 0, 0],
         "a1": [1, 0, 0],
         "a3": [0, 0, 1],
-        "n5": 1, "bp": 95,
+        "n5": 1, "pair": 95,
         "cluster": 1, "color": 3633362
       }]
     }]
@@ -105,7 +105,7 @@ Each monomer includes:
 - **a1**: backbone-base unit vector
 - **a3**: stacking unit vector
 - **n3/n5**: 3' and 5' neighbor indices
-- **bp**: base pair partner index (if paired)
+- **pair**: base pair partner index (if paired)
 - **cluster**: cluster group index
 - **color**: base-10 color value (from cadnano staple colors)
 

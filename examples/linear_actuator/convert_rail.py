@@ -51,7 +51,7 @@ def main():
     n_strands = len(strands)
     n_nucs = sum(len(s["monomers"]) for s in strands)
     n_bp = sum(
-        1 for s in strands for m in s["monomers"] if "bp" in m
+        1 for s in strands for m in s["monomers"] if "pair" in m
     )
     n_clusters = len(set(
         m["cluster"] for s in strands for m in s["monomers"]

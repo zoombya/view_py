@@ -8,19 +8,19 @@ from .utils import (POS_BACK, BASE_BASE, normalize,
 
 
 class StrandGenerator:
-    def generate_or_sq(self, bp, pos=None, direction=None, perp=None,
+    def generate_or_sq(self, n_bp, pos=None, direction=None, perp=None,
                        double=True, rot=0.0, angle=None,
                        lengths=None, begin=None, end=None):
         """Generate a helix with per-base-pair twist angles.
 
         Args:
-            bp: number of base pairs
+            n_bp: number of base pairs
             pos: starting position (np.array)
             direction: helix direction vector
             perp: perpendicular vector (backbone orientation)
             double: if True, generate both strands
             rot: initial rotation angle
-            angle: list of twist angles (length bp-1), or a single float
+            angle: list of twist angles (length n_bp-1), or a single float
             lengths: list of insertion lengths (for skips)
             begin: list of begin indices for insertion segments
             end: list of end indices for insertion segments
@@ -40,8 +40,8 @@ class StrandGenerator:
         if lengths and len(begin) != len(end):
             if len(end) + 1 == len(begin):
                 print(f"WARNING: begin ({len(begin)}) and end ({len(end)}) "
-                      f"array lengths mismatched; appending bp+1 to end")
-                end.append(bp + 1)
+                      f"array lengths mismatched; appending n_bp+1 to end")
+                end.append(n_bp + 1)
             else:
                 raise ValueError(
                     f"begin ({len(begin)}) and end ({len(end)}) "
@@ -49,16 +49,16 @@ class StrandGenerator:
 
         # Handle angle as list or scalar
         if angle is None:
-            angle = [33.75 * math.pi / 180] * (bp - 1)
+            angle = [33.75 * math.pi / 180] * (n_bp - 1)
         elif isinstance(angle, (int, float)):
-            angle = [angle] * bp
-        elif len(angle) != bp - 1:
-            if len(angle) >= bp:
-                angle = angle[:bp - 1]
+            angle = [angle] * n_bp
+        elif len(angle) != n_bp - 1:
+            if len(angle) >= n_bp:
+                angle = angle[:n_bp - 1]
             else:
                 raise ValueError(
                     f"incorrect angle array length ({len(angle)}), "
-                    f"should be {bp - 1}")
+                    f"should be {n_bp - 1}")
 
         # Normalize direction
         norm = np.linalg.norm(direction)
@@ -84,13 +84,13 @@ class StrandGenerator:
         # Store quaternions for complementary strand
         quats = []
 
-        for i in range(bp):
+        for i in range(n_bp):
             strand1.add_nucleotide(Nucleotide(
                 cur_pos - a1 * POS_BACK,
                 a1.copy(), a3.copy(), None
             ))
 
-            if i != bp - 1:
+            if i != n_bp - 1:
                 q = quaternion_from_axis_angle(direction, angle[i])
                 quats.append(q)
                 a1 = normalize(apply_quaternion(a1, q))
@@ -109,8 +109,8 @@ class StrandGenerator:
             a3 = -direction.copy()
             strand2 = Strand()
 
-            for i in range(bp):
-                nuc1 = strand1._nucleotides[bp - i - 1]
+            for i in range(n_bp):
+                nuc1 = strand1._nucleotides[n_bp - i - 1]
                 nuc2 = Nucleotide(
                     cur_pos - a1 * POS_BACK,
                     a1.copy(), a3.copy(), None,
@@ -119,14 +119,14 @@ class StrandGenerator:
                 nuc1.pair = nuc2
                 strand2.add_nucleotide(nuc2)
 
-                if i != bp - 1:
+                if i != n_bp - 1:
                     q = quaternion_conjugate(quats.pop())
                     a1 = normalize(apply_quaternion(a1, q))
                     cur_pos = cur_pos + normalize(a3) * BASE_BASE
 
                     if lengths:
                         for k in range(len(lengths)):
-                            idx = bp - 2 - i
+                            idx = n_bp - 2 - i
                             if idx >= begin[k] and idx < end[k] and lengths[k]:
                                 cur_pos += (normalize(a3) * BASE_BASE *
                                             (-lengths[k] /

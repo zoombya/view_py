@@ -136,7 +136,7 @@ class System:
                 if n5 >= 0:
                     m['n5'] = n5
                 if nuc.pair is not None:
-                    m['bp'] = nuc.pair.index
+                    m['pair'] = nuc.pair.index
                 if nuc.cluster is not None:
                     m['cluster'] = nuc.cluster
                 if nuc.color is not None:

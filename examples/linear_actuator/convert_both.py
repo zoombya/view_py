@@ -49,7 +49,7 @@ def summarise(oxview_dict):
         for s in sys["strands"]:
             total_strands += 1
             total_nucs += len(s["monomers"])
-            total_bp += sum(1 for m in s["monomers"] if "bp" in m)
+            total_bp += sum(1 for m in s["monomers"] if "pair" in m)
 
     print(f"\nCombined result:")
     print(f"  Systems:     {len(oxview_dict['systems'])}")
